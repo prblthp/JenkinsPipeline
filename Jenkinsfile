@@ -1,7 +1,8 @@
 pipeline {
   environment {
-    repo = "prblthp/dockerpipeline"
-  }
+    repo = "prblthp/dockerpipeline
+    DOCKERHUB_CREDENTIALS=credentials('dockerhubAccess')
+ }
   agent any
   stages {
     stage('Docker Build') {
@@ -11,12 +12,13 @@ pipeline {
     }
     stage('Docker Push') {
       steps {
-        withCredentials([usernamePassword(credentialsId: 'dockerhub-access', usernameVariable: 'Username', passwordVariable: 'Password')]) {
-          sh "docker login -u ${env.User} -p ${env.Password}"
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+ 
+          
           sh 'docker push $repo:v$BUILD_NUMBER'
         }
       }
-    }
+    
     stage('Clean docker image') {
       steps {
         sh 'docker rmi $repo:v$BUILD_NUMBER'

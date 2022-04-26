@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    repo = "prblthp/dockerpipeline
+    repo = "prblthp/dockerpipeline"
     DOCKERHUB_CREDENTIALS=credentials('dockerhubAccess')
  }
   agent any
